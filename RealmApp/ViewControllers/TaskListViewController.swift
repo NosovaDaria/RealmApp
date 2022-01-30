@@ -44,7 +44,12 @@ class TaskListViewController: UITableViewController {
         var content = cell.defaultContentConfiguration()
         let taskList = taskLists[indexPath.row]
         content.text = taskList.name
-        content.secondaryText = "\(taskList.tasks.count)"
+      
+        if taskList.tasks.filter("isComplete = false").count > 0 || taskList.tasks.filter("isComplete = true").count < 1 {
+          content.secondaryText = "\(taskList.tasks.filter("isComplete = false").count)"
+          cell.accessoryType = .none
+        } else { cell.accessoryType = .checkmark }
+      
         cell.contentConfiguration = content
         return cell
     }
@@ -82,6 +87,7 @@ class TaskListViewController: UITableViewController {
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
         guard let tasksVC = segue.destination as? TasksViewController else { return }
         let taskList = taskLists[indexPath.row]
+
         tasksVC.taskList = taskList
     }
 
