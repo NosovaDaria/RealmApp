@@ -92,12 +92,9 @@ class TaskListViewController: UITableViewController {
   }
   
   @IBAction func sortingList(_ sender: UISegmentedControl) {
-    switch sender.selectedSegmentIndex {
-    case 0:
-      taskLists = StorageManager.shared.realm.objects(TaskList.self).sorted(by: [SortDescriptor(keyPath: \Task.date, ascending:false)])
-    default:
-      taskLists = StorageManager.shared.realm.objects(TaskList.self).sorted(by: [SortDescriptor(keyPath: \Task.name)])
-    }
+    taskLists = sender.selectedSegmentIndex == 0
+    ? taskLists.sorted(byKeyPath: "data")
+    : taskLists.sorted(byKeyPath: "name")
     tableView.reloadData()
   }
   
